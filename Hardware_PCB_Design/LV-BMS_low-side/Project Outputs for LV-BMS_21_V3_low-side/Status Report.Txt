@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [LV-BMS_21_V3_low-side.PrjPcb]
+   Generated File[LV-BMS_V3_21E_low-side.TXT]
+   Generated File[LV-BMS_V3_21E_low-side.LDP]
+   Generated File[LV-BMS_V3_21E_low-side.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At ¤U¤È 08:25:36 On 2021/5/11

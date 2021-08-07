@@ -1,0 +1,475 @@
+******************************************************************************
+                  TI ARM Linker PC v20.2.1                     
+******************************************************************************
+>> Linked Tue Mar  9 13:32:37 2021
+
+OUTPUT FILE NAME:   <KIT21_LVBMS_Code.out>
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00002ed5
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  FLASH                 00000000   00040000  00003100  0003cf00  R  X
+  SRAM                  20000000   00008000  00000208  00007df8  RW X
+
+
+SEGMENT ALLOCATION MAP
+
+run origin  load origin   length   init length attrs members
+----------  ----------- ---------- ----------- ----- -------
+00000000    00000000    00003100   00003100    r-x
+  00000000    00000000    0000026c   0000026c    r-- .intvecs
+  0000026c    0000026c    00002e7c   00002e7c    r-x .text
+  000030e8    000030e8    00000018   00000018    r-- .cinit
+20000000    20000000    00000208   00000000    rw-
+  20000000    20000000    00000200   00000000    rw- .stack
+  20000200    20000200    00000008   00000000    rw- .data
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.intvecs   0    00000000    0000026c     
+                  00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
+
+.text      0    0000026c    00002e7c     
+                  0000026c    0000116c     I2C.obj (.text)
+                  000013d8    000007ec     ADC.obj (.text)
+                  00001bc4    000003c4     rtsv7M4_T_le_v4SPD16_eabi.lib : e_log.c.obj (.text:log)
+                  00001f88    000001f0                                   : e_logf.c.obj (.text:logf)
+                  00002178    000001d0     main.obj (.text)
+                  00002348    000001b6     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_add_t2.asm.obj (.text)
+                  000024fe    00000136                                   : fd_div_t2.asm.obj (.text)
+                  00002634    00000130     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
+                  00002764    0000011c     GPIO.obj (.text)
+                  00002880    00000104     driverlib.lib : sysctl.obj (.text:SysCtlClockSet)
+                  00002984    000000fc     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_mul_t2.asm.obj (.text)
+                  00002a80    0000009c                                   : memcpy_t2.asm.obj (.text)
+                  00002b1c    00000086                                   : fd_cmp_t2.asm.obj (.text:__aeabi_cdcmple)
+                  00002ba2    0000007a                                   : memset_t2.asm.obj (.text)
+                  00002c1c    00000070     driverlib.lib : adc.obj (.text:ADCSequenceStepConfigure)
+                  00002c8c    0000006e     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_tos_t2.asm.obj (.text)
+                  00002cfa    00000068                                   : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00002d62    00000048                                   : fd_toi_t2.asm.obj (.text)
+                  00002daa    00000002     --HOLE-- [fill = 0]
+                  00002dac    00000044                                   : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  00002df0    00000044                                   : fd_tou_t2.asm.obj (.text)
+                  00002e34    00000038                                   : fs_tod_t2.asm.obj (.text)
+                  00002e6c    00000034     driverlib.lib : sysctl.obj (.text:SysCtlPeripheralEnable)
+                  00002ea0    00000034                   : sysctl.obj (.text:SysCtlPeripheralReady)
+                  00002ed4    00000034     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
+                  00002f08    0000002e     driverlib.lib : adc.obj (.text:ADCIntStatus)
+                  00002f36    0000002e     rtsv7M4_T_le_v4SPD16_eabi.lib : i_tofd_t2.asm.obj (.text)
+                  00002f64    0000002c     driverlib.lib : adc.obj (.text:ADCSequenceConfigure)
+                  00002f90    0000002a                   : gpio.obj (.text:GPIODirModeSet)
+                  00002fba    00000020     rtsv7M4_T_le_v4SPD16_eabi.lib : u_tofd_t2.asm.obj (.text)
+                  00002fda    0000001e     driverlib.lib : adc.obj (.text:ADCSequenceDataGet)
+                  00002ff8    00000018                   : gpio.obj (.text:GPIOPinTypeGPIOOutput)
+                  00003010    00000016                   : adc.obj (.text:ADCProcessorTrigger)
+                  00003026    00000012                   : adc.obj (.text:ADCHardwareOversampleConfigure)
+                  00003038    00000012                   : gpio.obj (.text:GPIOPinTypeADC)
+                  0000304a    00000010     ADC.obj (.text:_Z3logf)
+                  0000305a    0000000e     driverlib.lib : adc.obj (.text:ADCSequenceDisable)
+                  00003068    0000000e                   : adc.obj (.text:ADCSequenceEnable)
+                  00003076    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  00003084    0000000c     driverlib.lib : adc.obj (.text:ADCReferenceSet)
+                  00003090    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  0000309c    0000000a     driverlib.lib : adc.obj (.text:ADCIntClear)
+                  000030a6    00000008                   : i2c.obj (.text:I2CMasterBusBusy)
+                  000030ae    00000008                   : i2c.obj (.text:I2CMasterBusy)
+                  000030b6    00000008                   : i2c.obj (.text:I2CMasterSlaveAddrSet)
+                  000030be    00000002     --HOLE-- [fill = 0]
+                  000030c0    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.c.obj (.text:__aeabi_errno_addr)
+                  000030c8    00000006     driverlib.lib : gpio.obj (.text:GPIOPinWrite)
+                  000030ce    00000006                   : sysctl.obj (.text:SysCtlDelay)
+                  000030d4    00000004                   : i2c.obj (.text:I2CMasterControl)
+                  000030d8    00000004                   : i2c.obj (.text:I2CMasterDataGet)
+                  000030dc    00000004                   : i2c.obj (.text:I2CMasterDataPut)
+                  000030e0    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  000030e4    00000004                                   : exit.c.obj (.text:abort:abort)
+
+.cinit     0    000030e8    00000018     
+                  000030e8    00000008     (__TI_handler_table)
+                  000030f0    00000007     (.cinit..data.load) [load image, compression = lzss]
+                  000030f7    00000001     --HOLE-- [fill = 0]
+                  000030f8    00000008     (__TI_cinit_table)
+
+.init_array 
+*          0    00000000    00000000     UNINITIALIZED
+
+.data      0    20000200    00000008     UNINITIALIZED
+                  20000200    00000004     I2C.obj (.data)
+                  20000204    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.c.obj (.data)
+
+.stack     0    20000000    00000200     UNINITIALIZED
+                  20000000    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.stack)
+                  20000004    000001fc     --HOLE--
+
+__llvm_prf_cnts 
+*          0    20000000    00000000     UNINITIALIZED
+
+MODULE SUMMARY
+
+       Module                         code    ro data   rw data
+       ------                         ----    -------   -------
+    .\
+       tm4c123gh6pm_startup_ccs.obj   12      620       0      
+       main.obj                       464     0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         476     620       0      
+                                                               
+    .\src\
+       I2C.obj                        4460    0         4      
+       ADC.obj                        2044    0         0      
+       GPIO.obj                       284     0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         6788    0         4      
+                                                               
+    ../driverlib.lib
+       gpio.obj                       394     0         0      
+       sysctl.obj                     370     0         0      
+       adc.obj                        322     0         0      
+       i2c.obj                        36      0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         1122    0         0      
+                                                               
+    D:\Backup\CCS\ccs\tools\compiler\ti-cgt-arm_20.2.1.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
+       e_log.c.obj                    964     0         0      
+       e_logf.c.obj                   496     0         0      
+       fd_add_t2.asm.obj              438     0         0      
+       fd_div_t2.asm.obj              310     0         0      
+       fd_mul_t2.asm.obj              252     0         0      
+       memcpy_t2.asm.obj              156     0         0      
+       fd_cmp_t2.asm.obj              134     0         0      
+       memset_t2.asm.obj              122     0         0      
+       fd_tos_t2.asm.obj              110     0         0      
+       copy_decompress_lzss.c.obj     104     0         0      
+       fd_toi_t2.asm.obj              72      0         0      
+       autoinit.c.obj                 68      0         0      
+       fd_tou_t2.asm.obj              68      0         0      
+       fs_tod_t2.asm.obj              56      0         0      
+       boot_cortex_m.c.obj            52      0         0      
+       i_tofd_t2.asm.obj              46      0         0      
+       u_tofd_t2.asm.obj              32      0         0      
+       copy_decompress_none.c.obj     14      0         0      
+       errno.c.obj                    8       0         4      
+       exit.c.obj                     4       0         0      
+       pre_init.c.obj                 4       0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         3510    0         4      
+                                                               
+       Stack:                         0       0         512    
+       Linker Generated:              0       23        0      
+    +--+------------------------------+-------+---------+---------+
+       Grand Total:                   11896   643       520    
+
+
+LINKER GENERATED COPY TABLES
+
+__TI_cinit_table @ 000030f8 records: 1, size/record: 8, table size: 8
+	.data: load addr=000030f0, load size=00000007 bytes, run addr=20000200, run size=00000008 bytes, compression=lzss
+
+
+LINKER GENERATED HANDLER TABLE
+
+__TI_handler_table @ 000030e8 records: 2, size/record: 4, table size: 8
+	index: 0, handler: __TI_decompress_lzss
+	index: 1, handler: __TI_decompress_none
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address   name                                                                
+-------   ----                                                                
+00003027  ADCHardwareOversampleConfigure                                      
+0000309d  ADCIntClear                                                         
+00002f09  ADCIntStatus                                                        
+00003011  ADCProcessorTrigger                                                 
+00003085  ADCReferenceSet                                                     
+00002f65  ADCSequenceConfigure                                                
+00002fdb  ADCSequenceDataGet                                                  
+0000305b  ADCSequenceDisable                                                  
+00003069  ADCSequenceEnable                                                   
+00002c1d  ADCSequenceStepConfigure                                            
+000030e5  C$$EXIT                                                             
+00002f91  GPIODirModeSet                                                      
+00002635  GPIOPadConfigSet                                                    
+00003039  GPIOPinTypeADC                                                      
+00002ff9  GPIOPinTypeGPIOOutput                                               
+000030c9  GPIOPinWrite                                                        
+000030a7  I2CMasterBusBusy                                                    
+000030af  I2CMasterBusy                                                       
+000030d5  I2CMasterControl                                                    
+000030d9  I2CMasterDataGet                                                    
+000030dd  I2CMasterDataPut                                                    
+000030b7  I2CMasterSlaveAddrSet                                               
+00003091  ResetISR                                                            
+00002881  SysCtlClockSet                                                      
+000030cf  SysCtlDelay                                                         
+00002e6d  SysCtlPeripheralEnable                                              
+00002ea1  SysCtlPeripheralReady                                               
+000021d3  _Z15I2CReadRegisterjj                                               
+00002179  _Z16I2CWriteRegisterjjh                                             
+0000304b  _Z3logf                                                             
+000017e1  _ZN3ADC11readVoltageEv                                              
+00001631  _ZN3ADC13readStackTempEv                                            
+00001b25  _ZN3ADC14convertVoltageEjfif                                        
+00001725  _ZN3ADC14readMosfetTempEv                                           
+00001a3d  _ZN3ADC17convertTempIndegCEjfffiff                                  
+00001a15  _ZN3ADC20getMosfetTemperatureEv                                     
+00001a29  _ZN3ADC21getVoltageMeasurementEv                                    
+00001a03  _ZN3ADC26getBatteryStackTemperatureEv                               
+000013e5  _ZN3ADC4InitEv                                                      
+000013d9  _ZN3ADCC1Ev                                                         
+000013d9  _ZN3ADCC2Ev                                                         
+00002771  _ZN4GPIO4InitEv                                                     
+00002813  _ZN4GPIO8LEDBlinkEjj                                                
+000027dd  _ZN4GPIO9pinEnableEjjb                                              
+00002765  _ZN4GPIOC1Ev                                                        
+00002765  _ZN4GPIOC2Ev                                                        
+00000e53  _ZN7bq769x010getADCGainEv                                           
+00000bdd  _ZN7bq769x011checkStatusEP15_Register_Group                         
+00000e61  _ZN7bq769x012getADCOffsetEv                                         
+00000fa1  _ZN7bq769x013updateCurrentEP15_Register_Groupb                      
+00000d33  _ZN7bq769x014enableChargingEP15_Register_Group                      
+00000b1d  _ZN7bq769x014getCellVoltageEh                                       
+00000e85  _ZN7bq769x014updateVoltagesEv                                       
+0000134d  _ZN7bq769x015I2CReadRegisterEj                                      
+00000d7b  _ZN7bq769x015disableChargingEv                                      
+20000200  _ZN7bq769x015instancePointerE                                       
+000012df  _ZN7bq769x016I2CWriteRegisterEjh                                    
+00000d9f  _ZN7bq769x017enableDischargingEP15_Register_Group                   
+00000b01  _ZN7bq769x017getBatteryCurrentEv                                    
+00000b0f  _ZN7bq769x017getBatteryVoltageEv                                    
+00000b4f  _ZN7bq769x017getMaxCellVoltageEv                                    
+00000b39  _ZN7bq769x017getMinCellVoltageEv                                    
+00000df9  _ZN7bq769x018disableDischargingEv                                   
+00000b65  _ZN7bq769x018getTemperatureDegCEh                                   
+00000ba9  _ZN7bq769x018getTemperatureDegFEh                                   
+0000104f  _ZN7bq769x018updateTemperaturesEv                                   
+00000e1d  _ZN7bq769x019enableAutoBalancingEv                                  
+00000e2f  _ZN7bq769x020disableAutoBalancingEv                                 
+00000455  _ZN7bq769x020setTemperatureLimitsEiiii                              
+00000e41  _ZN7bq769x021setAlertInterruptFlagEv                                
+0000042f  _ZN7bq769x021setShuntResistorValueEf                                
+00000abb  _ZN7bq769x022setBalancingThresholdsEiih                             
+00000443  _ZN7bq769x022setThermistorBetaValueEi                               
+00000aed  _ZN7bq769x023setIdleCurrentThresholdEi                              
+0000117d  _ZN7bq769x023updateBalancingSwitchesEP15_Register_Group             
+000009e7  _ZN7bq769x028setCellOvervoltageProtectionEP15_Register_Groupii      
+0000090b  _ZN7bq769x029setCellUndervoltageProtectionEP15_Register_Groupii     
+00000651  _ZN7bq769x033setOvercurrentDischargeProtectionEP15_Register_Groupli 
+000004ad  _ZN7bq769x034setShortCircuitDischargeProtectionEP15_Register_Groupli
+00000327  _ZN7bq769x04InitEhh                                                 
+00000ce1  _ZN7bq769x06updateEP15_Register_Group                               
+000012cd  _ZN7bq769x08alertISREv                                              
+00000d0f  _ZN7bq769x08shutdownEv                                              
+0000026d  _ZN7bq769x0C1Ehi                                                    
+0000026d  _ZN7bq769x0C2Ehi                                                    
+20000200  __STACK_END                                                         
+00000200  __STACK_SIZE                                                        
+20000200  __STACK_TOP                                                         
+000030f8  __TI_CINIT_Base                                                     
+00003100  __TI_CINIT_Limit                                                    
+000030e8  __TI_Handler_Table_Base                                             
+000030f0  __TI_Handler_Table_Limit                                            
+00002dad  __TI_auto_init_nobinit_nopinit                                      
+00002cfb  __TI_decompress_lzss                                                
+00003077  __TI_decompress_none                                                
+ffffffff  __TI_pprof_out_hndl                                                 
+ffffffff  __TI_prof_data_size                                                 
+ffffffff  __TI_prof_data_start                                                
+00000000  __TI_static_base__                                                  
+00002b1d  __aeabi_cdcmpeq                                                     
+00002b1d  __aeabi_cdcmple                                                     
+00002c8d  __aeabi_d2f                                                         
+00002d63  __aeabi_d2iz                                                        
+00002df1  __aeabi_d2uiz                                                       
+00002353  __aeabi_dadd                                                        
+000024ff  __aeabi_ddiv                                                        
+00002985  __aeabi_dmul                                                        
+00002349  __aeabi_dsub                                                        
+000030c1  __aeabi_errno_addr                                                  
+00002e35  __aeabi_f2d                                                         
+00002f37  __aeabi_i2d                                                         
+00002ba3  __aeabi_memclr                                                      
+00002ba3  __aeabi_memclr4                                                     
+00002ba3  __aeabi_memclr8                                                     
+00002a81  __aeabi_memcpy                                                      
+00002a81  __aeabi_memcpy4                                                     
+00002a81  __aeabi_memcpy8                                                     
+00002ba5  __aeabi_memset                                                      
+00002ba5  __aeabi_memset4                                                     
+00002ba5  __aeabi_memset8                                                     
+00002fbb  __aeabi_ui2d                                                        
+ffffffff  __binit__                                                           
+ffffffff  __c_args__                                                          
+UNDEFED   __mpu_init                                                          
+20000000  __stack                                                             
+20000000  __start___llvm_prf_cnts                                             
+20000000  __stop___llvm_prf_cnts                                              
+00002ed5  _c_int00_noargs                                                     
+UNDEFED   _system_post_cinit                                                  
+000030e1  _system_pre_init                                                    
+000030e5  abort                                                               
+ffffffff  binit                                                               
+20000204  errno                                                               
+00000000  g_pfnVectors                                                        
+00001bc5  log                                                                 
+00001f89  logf                                                                
+00001bc5  logl                                                                
+0000222f  main                                                                
+00002a81  memcpy                                                              
+00002bab  memset                                                              
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address   name                                                                
+-------   ----                                                                
+00000000  __TI_static_base__                                                  
+00000000  g_pfnVectors                                                        
+00000200  __STACK_SIZE                                                        
+0000026d  _ZN7bq769x0C1Ehi                                                    
+0000026d  _ZN7bq769x0C2Ehi                                                    
+00000327  _ZN7bq769x04InitEhh                                                 
+0000042f  _ZN7bq769x021setShuntResistorValueEf                                
+00000443  _ZN7bq769x022setThermistorBetaValueEi                               
+00000455  _ZN7bq769x020setTemperatureLimitsEiiii                              
+000004ad  _ZN7bq769x034setShortCircuitDischargeProtectionEP15_Register_Groupli
+00000651  _ZN7bq769x033setOvercurrentDischargeProtectionEP15_Register_Groupli 
+0000090b  _ZN7bq769x029setCellUndervoltageProtectionEP15_Register_Groupii     
+000009e7  _ZN7bq769x028setCellOvervoltageProtectionEP15_Register_Groupii      
+00000abb  _ZN7bq769x022setBalancingThresholdsEiih                             
+00000aed  _ZN7bq769x023setIdleCurrentThresholdEi                              
+00000b01  _ZN7bq769x017getBatteryCurrentEv                                    
+00000b0f  _ZN7bq769x017getBatteryVoltageEv                                    
+00000b1d  _ZN7bq769x014getCellVoltageEh                                       
+00000b39  _ZN7bq769x017getMinCellVoltageEv                                    
+00000b4f  _ZN7bq769x017getMaxCellVoltageEv                                    
+00000b65  _ZN7bq769x018getTemperatureDegCEh                                   
+00000ba9  _ZN7bq769x018getTemperatureDegFEh                                   
+00000bdd  _ZN7bq769x011checkStatusEP15_Register_Group                         
+00000ce1  _ZN7bq769x06updateEP15_Register_Group                               
+00000d0f  _ZN7bq769x08shutdownEv                                              
+00000d33  _ZN7bq769x014enableChargingEP15_Register_Group                      
+00000d7b  _ZN7bq769x015disableChargingEv                                      
+00000d9f  _ZN7bq769x017enableDischargingEP15_Register_Group                   
+00000df9  _ZN7bq769x018disableDischargingEv                                   
+00000e1d  _ZN7bq769x019enableAutoBalancingEv                                  
+00000e2f  _ZN7bq769x020disableAutoBalancingEv                                 
+00000e41  _ZN7bq769x021setAlertInterruptFlagEv                                
+00000e53  _ZN7bq769x010getADCGainEv                                           
+00000e61  _ZN7bq769x012getADCOffsetEv                                         
+00000e85  _ZN7bq769x014updateVoltagesEv                                       
+00000fa1  _ZN7bq769x013updateCurrentEP15_Register_Groupb                      
+0000104f  _ZN7bq769x018updateTemperaturesEv                                   
+0000117d  _ZN7bq769x023updateBalancingSwitchesEP15_Register_Group             
+000012cd  _ZN7bq769x08alertISREv                                              
+000012df  _ZN7bq769x016I2CWriteRegisterEjh                                    
+0000134d  _ZN7bq769x015I2CReadRegisterEj                                      
+000013d9  _ZN3ADCC1Ev                                                         
+000013d9  _ZN3ADCC2Ev                                                         
+000013e5  _ZN3ADC4InitEv                                                      
+00001631  _ZN3ADC13readStackTempEv                                            
+00001725  _ZN3ADC14readMosfetTempEv                                           
+000017e1  _ZN3ADC11readVoltageEv                                              
+00001a03  _ZN3ADC26getBatteryStackTemperatureEv                               
+00001a15  _ZN3ADC20getMosfetTemperatureEv                                     
+00001a29  _ZN3ADC21getVoltageMeasurementEv                                    
+00001a3d  _ZN3ADC17convertTempIndegCEjfffiff                                  
+00001b25  _ZN3ADC14convertVoltageEjfif                                        
+00001bc5  log                                                                 
+00001bc5  logl                                                                
+00001f89  logf                                                                
+00002179  _Z16I2CWriteRegisterjjh                                             
+000021d3  _Z15I2CReadRegisterjj                                               
+0000222f  main                                                                
+00002349  __aeabi_dsub                                                        
+00002353  __aeabi_dadd                                                        
+000024ff  __aeabi_ddiv                                                        
+00002635  GPIOPadConfigSet                                                    
+00002765  _ZN4GPIOC1Ev                                                        
+00002765  _ZN4GPIOC2Ev                                                        
+00002771  _ZN4GPIO4InitEv                                                     
+000027dd  _ZN4GPIO9pinEnableEjjb                                              
+00002813  _ZN4GPIO8LEDBlinkEjj                                                
+00002881  SysCtlClockSet                                                      
+00002985  __aeabi_dmul                                                        
+00002a81  __aeabi_memcpy                                                      
+00002a81  __aeabi_memcpy4                                                     
+00002a81  __aeabi_memcpy8                                                     
+00002a81  memcpy                                                              
+00002b1d  __aeabi_cdcmpeq                                                     
+00002b1d  __aeabi_cdcmple                                                     
+00002ba3  __aeabi_memclr                                                      
+00002ba3  __aeabi_memclr4                                                     
+00002ba3  __aeabi_memclr8                                                     
+00002ba5  __aeabi_memset                                                      
+00002ba5  __aeabi_memset4                                                     
+00002ba5  __aeabi_memset8                                                     
+00002bab  memset                                                              
+00002c1d  ADCSequenceStepConfigure                                            
+00002c8d  __aeabi_d2f                                                         
+00002cfb  __TI_decompress_lzss                                                
+00002d63  __aeabi_d2iz                                                        
+00002dad  __TI_auto_init_nobinit_nopinit                                      
+00002df1  __aeabi_d2uiz                                                       
+00002e35  __aeabi_f2d                                                         
+00002e6d  SysCtlPeripheralEnable                                              
+00002ea1  SysCtlPeripheralReady                                               
+00002ed5  _c_int00_noargs                                                     
+00002f09  ADCIntStatus                                                        
+00002f37  __aeabi_i2d                                                         
+00002f65  ADCSequenceConfigure                                                
+00002f91  GPIODirModeSet                                                      
+00002fbb  __aeabi_ui2d                                                        
+00002fdb  ADCSequenceDataGet                                                  
+00002ff9  GPIOPinTypeGPIOOutput                                               
+00003011  ADCProcessorTrigger                                                 
+00003027  ADCHardwareOversampleConfigure                                      
+00003039  GPIOPinTypeADC                                                      
+0000304b  _Z3logf                                                             
+0000305b  ADCSequenceDisable                                                  
+00003069  ADCSequenceEnable                                                   
+00003077  __TI_decompress_none                                                
+00003085  ADCReferenceSet                                                     
+00003091  ResetISR                                                            
+0000309d  ADCIntClear                                                         
+000030a7  I2CMasterBusBusy                                                    
+000030af  I2CMasterBusy                                                       
+000030b7  I2CMasterSlaveAddrSet                                               
+000030c1  __aeabi_errno_addr                                                  
+000030c9  GPIOPinWrite                                                        
+000030cf  SysCtlDelay                                                         
+000030d5  I2CMasterControl                                                    
+000030d9  I2CMasterDataGet                                                    
+000030dd  I2CMasterDataPut                                                    
+000030e1  _system_pre_init                                                    
+000030e5  C$$EXIT                                                             
+000030e5  abort                                                               
+000030e8  __TI_Handler_Table_Base                                             
+000030f0  __TI_Handler_Table_Limit                                            
+000030f8  __TI_CINIT_Base                                                     
+00003100  __TI_CINIT_Limit                                                    
+20000000  __stack                                                             
+20000000  __start___llvm_prf_cnts                                             
+20000000  __stop___llvm_prf_cnts                                              
+20000200  _ZN7bq769x015instancePointerE                                       
+20000200  __STACK_END                                                         
+20000200  __STACK_TOP                                                         
+20000204  errno                                                               
+ffffffff  __TI_pprof_out_hndl                                                 
+ffffffff  __TI_prof_data_size                                                 
+ffffffff  __TI_prof_data_start                                                
+ffffffff  __binit__                                                           
+ffffffff  __c_args__                                                          
+ffffffff  binit                                                               
+UNDEFED   __mpu_init                                                          
+UNDEFED   _system_post_cinit                                                  
+
+[140 symbols]

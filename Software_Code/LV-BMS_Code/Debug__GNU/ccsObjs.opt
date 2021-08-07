@@ -1,0 +1,1 @@
+"./main.o" "./tm4c123gh6pm_startup_ccs_gcc.o" "./src/ADC.o" "./src/CANDriver.o" "./src/GPIO.o" "./src/I2C.o" "./src/Timer.o" "../driverlib.lib" -Wl,-T"../tm4c123gh6pm.lds" -Wl,--start-group -lc -Wl,--end-group 

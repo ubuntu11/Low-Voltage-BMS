@@ -1,0 +1,107 @@
+﻿
+/*  Created on: 18.12.2017
+ *      Author: Kille
+ *		Email: kilian.walk@ka-raceing.de
+ */
+
+
+//So koennte die .hpp der geerbten CAN Treiber Klasse aussehen
+
+#include "CAN/CANDriver.hpp"
+
+typedef enum {
+	//TX
+	C4_MASTER_WARNING_SLOT = 6,
+	//RX
+	C4_HVMPB_STATUS_SLOT= 20,
+	C4_HVMPB_VOLTAGE_CURRENT_SLOT = 21
+} CANBatterySlot;
+
+typedef enum {
+	C4_HVMPB_STATUS_ID			= 	0x130,
+	C4_VOLTAGE_CURRENT_ID			=  	0x19A,
+	C4_MASTER_WARNING_ID			=	0x556,
+} CANMsgIDBattery;
+
+
+class CANDriverBattery : public CANDriver{
+private:
+public:
+	CANDriverBattery();
+	virtual ~CANDriverBattery();
+	void registerReceiveMessages(void);
+	void sendWarning(uint32_t warnings);
+};
+
+
+
+//So koennte die .cpp der geerbten CAN Treiber Klasse aussehen
+
+
+CANDriverBattery::CANDriverBattery(){
+	//  Auto-generated constructor stub
+
+}
+
+CANDriverBattery::~CANDriverBattery(){
+	// Auto-generated destructor stub
+}
+
+
+void CANDriverBattery::registerReceiveMessages(void){
+
+	rxMessage.ui32Flags = MSG_OBJ_RX_INT_ENABLE | MSG_OBJ_USE_ID_FILTER;
+	rxMessage.ui32MsgIDMask = 0xfffff;
+	
+	rxMessage.ui32MsgID = C4_HVMPB_STATUS_ID;
+	rxMessage.ui32MsgLen = 8;
+	CANMessageSet(can_base, C4_HVMPB_STATUS_SLOT, &rxMessage, MSG_OBJ_TYPE_RX);
+
+	rxMessage.ui32MsgID = C4_VOLTAGE_CURRENT_ID;
+	rxMessage.ui32MsgLen = 6;
+	CANMessageSet(can_base, C4_HVMPB_VOLTAGE_CURRENT_SLOT, &rxMessage, MSG_OBJ_TYPE_RX);
+}
+void CANDriverBattery::sendWarning(uint32_t warning){
+	uint8_t warningCAN[4];
+	warningCAN[0] = (warning >> 24) & 0xff;
+	warningCAN[1] = (warning >> 16) & 0xff;
+	warningCAN[2] = (warning >> 8) & 0xff;
+	warningCAN[3] = warning & 0xff;
+
+	txMessage.pui8MsgData = warningCAN;
+	txMessage.ui32MsgID = C4_MASTER_WARNING_ID;
+	txMessage.ui32MsgLen = 4;
+	sendCANMessage(&txMessage, C4_MASTER_WARNING_SLOT);
+}	
+
+
+
+//So koennten Nachrichten abgerufen werden, Funktion vermutlich nicht in der geerbten CAN Treiber Klasse
+
+CANDriverBattery canBattery; // erstellen des Objekt
+canBattery.init(PA0, PA1, 1000000); //initialisierung
+
+void Master::checkBatteryCAN(){
+	canBattery.checkStatusInterrupts();
+	// Jetz Mask abfragen, die angibt für welche Postboxen Interrupts vorliegen
+	uint32_t canInterruptMask;
+	canInterruptMask = canBattery.getMessageInterruptMask();
+	if (canInterruptMask != 0){
+		// es liegen Interrupts vor
+		uint8_t i;
+		for (i= 0; i< 32; i++){
+			if (canInterruptMask & (1<<i)){
+				tCANMsgObject canMessage = canBattery.getMessage(i+1);
+				// CAN Message abholen und je nach ID behandeln
+				// Unterscheidung je nach CAN-Message
+				if (canMessage.ui32MsgLen > 0){
+					switch(canMessage.ui32MsgID){
+					case C4_HVMPB_STATUS_ID:{
+						hvmpb.setStatus((canMessage.pui8MsgData[1] | (canMessage.pui8MsgData[0] <<8)), (canMessage.pui8MsgData[5] | (canMessage.pui8MsgData[4] <<8) | (canMessage.pui8MsgData[3] <<16)));
+					}
+					}
+				}
+			}
+		}
+	}
+}
