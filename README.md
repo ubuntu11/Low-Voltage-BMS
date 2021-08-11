@@ -2,6 +2,7 @@
 This is a hardware and software development of a low voltage battery management syetem, which is mainly designed for our autonomous BEV and self-driving car. However, it could also be applied to other electric devices which need an monitoring system for low voltage battery.
 
 #TODO images
+![LV-BMS version 1 PCB](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/BMS_version1.jpg)
 
 The repository includes:
 * The Altium PCB design of LV-BMS with either low-side MOSFET switch control or high-side.
@@ -52,7 +53,7 @@ The main goals of the
     * make sure the path to the TivaWare Peripheral Driver Library is correct in the properties of the project.
         ```
         if you download this repository directly without any changing, your directory should have the following structure:
-        
+
         <dataset root directory>/
         images/
             amodal_masks/
