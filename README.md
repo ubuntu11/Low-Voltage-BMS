@@ -5,15 +5,17 @@ This is a hardware and software development of a low voltage battery management 
 ![LV-BMS version 1 PCB](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/BMS_version1.jpg)
 
 The repository includes:
-* The Altium PCB design of LV-BMS with either low-side MOSFET switch control or high-side.
-* Source code for the microcontroller based on C++ and is written and exploited in Code Composer Studio.
+* The Altium PCB design of LV-BMS with either low-side MOSFET switch control(version 2) or high-side(version 3).
+* Source code for the microcontroller based on C++, which is compatible for all version(1~3) design, and is written and exploited in Code Composer Studio.
 * Texas Instruments TivaWare Peripheral Driver Library for the control of microcontroller. [datasheet](https://www.ti.com/lit/ug/spmu298e/spmu298e.pdf?ts=1628540888902&ref_url=https%253A%252F%252Fwww.google.com%252F)
 
 # Table Of Contents
-
+* [Concept and Functionality of the LV-BMS](https://github.com/PingCheng-Wei/Low-Voltage-BMS/concept-and-funtionality-of-the-lv-bms)
 
 # Concept and Functionality of the LV-BMS
-The main goals of the 
+The main idea that we need a battery management system is that lithium battery has a higher energy density, higher efficiency and lighter weight in comparison with other art of battery such as LiFePo4, which is crucial in our case to gain better performence, but it could also be life-threatening when something goes wrong. Therefore, we need a monitoring system, BMS, to keep supervising the status of the lithium battery stack during the execution of whole system and take defensive action if it is needed. The status at here means the **voltages**, **current** and **temperatures** of the battery stack. To be more specific, voltages could be the **cell voltages** as well as the **entire voltage** and current is the **entire current** that flows out the battery stack and temperatures could be the **cell temperatures** as well as the **MOSFETs' temperatures**. 
+
+BMS monitor these three status to make sure they are all in the acceptable range. if not, then BMS will cut off the power supply of the whole sytem(Battery) by switching the MOSFETs to off so that no further damage could happen and if the stutas are back to normal again, then BMS will turn on the power suppy again.
 
 # Hardware Part
 
