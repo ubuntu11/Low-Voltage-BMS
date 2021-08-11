@@ -1,8 +1,0 @@
-DRC Rules Export File for PCB: C:\Users\denni\Documents\KIT Studium\KA-RaceIng\LV\LV_21\LV_PCB Design_Altium\LV-BMS_21_V3_low-side\LV-BMS_V3_21E_low-side.PcbDoc
-RuleKind=Clearance|RuleName=Stitching GND|Scope=Board|Minimum=5.00
-RuleKind=Clearance|RuleName=Stitching No Net_1|Scope=Board|Minimum=5.00
-RuleKind=Clearance|RuleName=Stitching No Net|Scope=Board|Minimum=5.00
-RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
-RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=1.97
-RuleKind=Width|RuleName=Width|Scope=Board|Minimum=10.00
-RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=10.00
