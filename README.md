@@ -1,7 +1,7 @@
 # Low Voltage Battery Management System with AFE(BQ76920) and Microcontroller (TM4C123GH6PM)
 This is a hardware and software development of a low voltage battery management syetem, which is mainly designed for our autonomous BEV and self-driving car. However, it could also be applied to other electric devices which need an monitoring system for low voltage battery.
 
-#TODO images
+**LV-BMS version 1 PCB:**
 ![LV-BMS version 1 PCB](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/BMS_version1.jpg)
 
 The repository includes:
