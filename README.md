@@ -113,9 +113,9 @@ If the capacity is too big, then the capacitor does not have enough time to reac
 ### Analog to Digital Converter (ADC)
 Since the microcontroller can't understand the analog value such as 3.3V or 1A and its internal measurement only send back a bit by bit signal e.g. in a range of 0 ~ 4096 corresponding to 12 bits signal, we need to convert/calculate this bit by bit signal back to the corresponding analog value range and we will recieve the so called digital value. Here is the general equation of ADC:
 
-$$
-DigitalValue = \frac{ADCMeasuredValue}{2^{signal-bit-length}}\cdot AnalogValueRange
-$$
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;DigitalValue = \frac{ADCMeasuredValue}{2^{signal-bit-length}}\cdot AnalogValueRange" />
+
 
 
 For example if we have the following situation:
@@ -124,9 +124,11 @@ For example if we have the following situation:
 * ADC measured value: 3000 
 
 then our converted digital value would be:
+
 $$
 DigitalValue = \frac{3000}{2^{12}}\cdot (4.3-0) = 3.15
 $$
+
 which means the measured ADC valus 3000 is corresponding to 3.15V.
 
 
