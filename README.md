@@ -81,8 +81,46 @@ In order to grasp the deep understanding of how I2C works, it is highly recomman
 * I2C Signal:
     ![oszi_i2c_signal](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/oszi_i2c.jpeg)
 
+### FET Driver:
+As mentioned above, BQ76920 itself only support the low-side switch feature. However, in some cases it would benefit more if we would able to use high-side switch. That is why we need a FET Driver to convert the signal of CHG/DSG from BQ76920 to higher voltage. The idea behind [BQ76200](https://www.ti.com/lit/ds/symlink/bq76200.pdf?ts=1629016585303&ref_url=https%253A%252F%252Fwww.google.com%252F) is using a `charge pump capacitor`, which works like an extra small battery connected in series with low-voltage battery, as you could see in the circuit example `between the VDDCP and BAT pins`. During the operation the charge pump capacitor will keep charging and discharging process to store and release the energy. By doing so we could raise our gate-voltage of MOSFETs to surpass the source-voltage of MOSFETs, which is same as low-voltage battery voltage, and achieve a positive gate-source-voltage to turn on the high-side MOSFETs. 
 
-### Analog to Digital Converter (ADC)
+Here is how the voltage from CHG and DSG changes after the FET driver:
+| ![oszi_chg](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/oszi_chg.jpeg) | ![oszi_dsg](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/oszi_dsg.jpeg) |
+
+It is also interesting to see the charging and discharging process in charge pump capacitor:
+![oszi_vddcp](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/oszi_vddcp.jpeg)
+
+If everything works fine the `gate-source-voltage` of the MOSFETs would looks like this:
+![oszi_vgs](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/oszi_vgs.jpeg)
+
+`Here is the capacity of the charge pump capacitor very critical !!!` If the value is too small, then the capacitor can't store enough energy and it will soon be all released, which leads to just a small pick of higher voltage as the images below show:
+
+| ![chg_bq_driver](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/chg_bq_driver.png) | ![dsg_bq_driver](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/dsg_bq_driver.png) | 
+
+If the capacity is too big, then the capacitor does not have enough time to reach the needed energy since the charging rate is too low. Therefore, after several testing we have chosen **$2.2 uF$** instead of **$470nF$** according to datasheet.
+
+### Analog to Digital Converter (ADC):
+Since the microcontroller can't understand the analog value such as 3.3V or 1A and its internal measurement only send back a bit by bit signal e.g. in a range of 0 ~ 4096 corresponding to 12 bits signal, we need to convert/calculate this bit by bit signal back to the corresponding analog value range and we will recieve the so called digital value. Here is the general equation of ADC:
+
+$$
+DigitalValue = \frac{ADCMeasuredValue}{2^{signal-bit-length}}\cdot AnalogValueRange
+$$
+
+
+For example if we have the following situation:
+* ADC signal bit length: 12 bits
+* Voltage range: 0 ~ 4.3V
+* ADC measured value: 3000 
+
+then our converted digital value would be:
+$$
+DigitalValue = \frac{3000}{2^{12}}\cdot (4.3-0) = 3.15
+$$
+which means the measured ADC valus 3000 is corresponding to 3.15V.
+
+
+
+
 
 
 
