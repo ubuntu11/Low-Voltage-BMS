@@ -49,28 +49,42 @@ You could find all the components and their footprints that are utilized on the 
 * 3.3V CAN Bus Transceivers: [SN65HVD230](https://www.ti.com/lit/ds/symlink/sn65hvd230.pdf?ts=1628607753622)
 
 Other useful datasheets for more understanding of the circuit design:
-* [bq76200 Beyond the Simple Application Schematic](https://www.ti.com/lit/an/slua794/slua794.pdf?ts=1629017183044&ref_url=https%253A%252F%252Fwww.google.com%252F)
-* [bq769x0 Family Top 10 Design Considerations](https://www.ti.com/lit/an/slua749a/slua749a.pdf?ts=1629017197968&ref_url=https%253A%252F%252Fwww.google.com%252F)
-* [bq769x0 BMS Configurations for Cordless Appliances](https://www.ti.com/lit/an/slua810/slua810.pdf?ts=1628994785378)
-* [FET Configurations for the bq76200 High-Side N-Channel FET Driver](https://www.ti.com/lit/an/slva729a/slva729a.pdf?ts=1629017239970&ref_url=https%253A%252F%252Fwww.google.com%252F)
-* [I2C Communication Sample Code for the bq76940 with a CRC Option Based on the MSP430G2553](https://www.ti.com/lit/an/slva626b/slva626b.pdf?ts=1629017637344&ref_url=https%253A%252F%252Fwww.google.com%252F)
-* [10s battery monitoring, balancing, and comp protection, 50A discharge ref design](https://www.ti.com/lit/ug/tiduar8c/tiduar8c.pdf?ts=1629017610394&ref_url=https%253A%252F%252Fwww.google.com%252F)
-* [MCU_tm4c123gh6pm](https://www.ti.com/lit/ds/spms376e/spms376e.pdf?ts=1628616879792&ref_url=https%253A%252F%252Fwww.google.com%252F)
-* [TivaWare Peripheral Driver Library Users's Guide](https://www.ti.com/lit/ug/spmu298e/spmu298e.pdf?ts=1628540888902&ref_url=https%253A%252F%252Fwww.google.com%252F)
+* BQ relevant:
+    * [bq76200 Beyond the Simple Application Schematic](https://www.ti.com/lit/an/slua794/slua794.pdf?ts=1629017183044&ref_url=https%253A%252F%252Fwww.google.com%252F)
+    * [FET Configurations for the bq76200 High-Side N-Channel FET Driver](https://www.ti.com/lit/an/slva729a/slva729a.pdf?ts=1629017239970&ref_url=https%253A%252F%252Fwww.google.com%252F)
+    * [bq769x0 Family Top 10 Design Considerations](https://www.ti.com/lit/an/slua749a/slua749a.pdf?ts=1629017197968&ref_url=https%253A%252F%252Fwww.google.com%252F)
+    * [10s battery monitoring, balancing, and comp protection, 50A discharge ref design](https://www.ti.com/lit/ug/tiduar8c/tiduar8c.pdf?ts=1629017610394&ref_url=https%253A%252F%252Fwww.google.com%252F)
+    * [bq769x0 BMS Configurations for Cordless Appliances](https://www.ti.com/lit/an/slua810/slua810.pdf?ts=1628994785378)
+
+* I2C relevant:
+    * [Understanding the I2C Bus](https://www.ti.com/lit/an/slva704/slva704.pdf?ts=1629009658472&ref_url=https%253A%252F%252Fwww.google.com%252F)
+    * [I2C Communication Sample Code for the bq76940 with a CRC Option Based on the MSP430G2553](https://www.ti.com/lit/an/slva626b/slva626b.pdf?ts=1629017637344&ref_url=https%253A%252F%252Fwww.google.com%252F)
+
+* Microcontroller relevant:
+    * [MCU_tm4c123gh6pm](https://www.ti.com/lit/ds/spms376e/spms376e.pdf?ts=1628616879792&ref_url=https%253A%252F%252Fwww.google.com%252F)
+    * [TivaWare Peripheral Driver Library Users's Guide](https://www.ti.com/lit/ug/spmu298e/spmu298e.pdf?ts=1628540888902&ref_url=https%253A%252F%252Fwww.google.com%252F)
 
 ## Explaination of the Functionality in each Part
 ### Analog Front End (AFE)
-As described above, we use an AFE, BQ76920, to realize the parameters monitoring and MOSFETs control. Here we would like to explain more about the funtionality behind `BQ76920`. It is also helpful to go deep into datasheet as it not only provide you a better overview of hardware but also the algorithm in software code.
+As described above, we use an AFE, BQ76920, to realize the parameters monitoring and MOSFETs control. Here we would like to explain more about the funtionality behind `BQ76920`. It is also helpful to go deep into datasheet as it not only provides you a better overview of hardware but also better understanding of the algorithm in software code.
 
-BQ76920 is a pre-programmed chips that already has the function like voltages, current and temperatures measurement and it would automatically keep monitoring/update the value in a certain amount of time and if something goes wrong, the internal system status will be set to `bit 0` and automatically disable the charge and discharge control (CHG & DSG Pins set to 0). Therefore, in order to use BQ76920, it is rather important to grasp the concept of how to let microcontroller communicate with the BQ's register and control the BQ's status through I2C than understand how internal measurement works. here is an important system status of BQ76920 in register:
+BQ76920 is a pre-programmed chips that already has the function like voltages, current and temperatures measurement and it would automatically keep monitoring/update the value in a certain amount of time. If something goes wrong, the internal system status will be set to `bit 0` and automatically disable the charge and discharge control (CHG & DSG Pins set to 0). Therefore, in order to use BQ76920, it is rather important to grasp the concept of how to let microcontroller communicate with the BQ's register and control the BQ's status through I2C than understand how internal measurement works. here is an important system status of BQ76920 in register:
 ![status in register map](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/registermap_stat_ctrl2.jpg)
 
 Take cell voltages measurement for example, `it update the cell voltages at a rate of 250 ms` and store the value inside its register for other functions utiliztion such as overvoltage and undervoltage check. This means that if BQ76920 updates the voltage and finds out they are out of the limit range, it will internally set the corresponding system status to 0 (means error) and since system status are not all 1, it will then automatically turn off the power supply by shuting down the CHG or DSG Pin to bit 0, which is bit 1 (means on) when everything is fine, and send a alert signal to our microcontroller. This all happen in BQ internally by itself. Thus, you might wonder why we need a microcontroller then if everything works internally. The reason is that we need a microcontroller to clear the alert/error bit. By that it means that microcontroller will keep demanding the BQ to update its system status, in this case keep measuring the cell voltages, and until the voltages are back into acceptable range microcontroller can then successfully clear the alert/error bit and BQ would then allow the charge or discharge control by setting CHG or DSG Pin to bit 1.
 
-
 ### I2C Communication
+In order to grasp the deep understanding of how I2C works, it is highly recommanded that you go through and deep into this article "[Understanding the I2C Bus](https://www.ti.com/lit/an/slva704/slva704.pdf?ts=1629009658472&ref_url=https%253A%252F%252Fwww.google.com%252F)". In the article you should understand how I2C recognize the start as well as end bit from SCL (Serial Clock) & SDA (Serial Data) and how the signals are read. Here we would like to show some I2C signal from Oscilloscope:
+
+* overview:
+    ![oszi_i2c_overview](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/oszi_i2c_ueberblick.jpeg)
+* I2C Signal:
+    ![oszi_i2c_signal](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/oszi_i2c.jpeg)
+
 
 ### Analog to Digital Converter (ADC)
+
+
 
 ## Altium PCB Design
 overview of each function part of the PCB design based on LV-BMS version 1:
