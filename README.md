@@ -108,7 +108,7 @@ If everything works fine the `gate-source-voltage` of the MOSFETs would looks li
 
 ![chg_dsg_bq_driver](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/chg_dsg_bq_driver.JPG)
 
-If the capacity is too big, then the capacitor does not have enough time to reach the needed energy since the charging rate is too low. Therefore, after several testing we have chosen **$2.2 uF$** instead of **$470nF$** according to datasheet.
+If the capacity is too big, then the capacitor does not have enough time to reach the needed energy since the charging rate is too low. Therefore, `after several testing we have chosen $2.2 uF$ instead of $470nF$ according to datasheet`.
 
 ### Analog to Digital Converter (ADC)
 Since the microcontroller can't understand the analog value such as 3.3V or 1A and its internal measurement only send back a bit by bit signal e.g. in a range of 0 ~ 4096 corresponding to 12 bits signal, we need to convert/calculate this bit by bit signal back to the corresponding analog value range and we will recieve the so called digital value. Here is the general equation of ADC:
