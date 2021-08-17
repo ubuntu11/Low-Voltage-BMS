@@ -182,6 +182,8 @@ Overall steps and ideas in main function (main.cpp):
 10. check the Temperature status. if too high, then BMS shutdown the battery
 11. Send out the message through the CAN bus to let our `Main Control Unit` in car know the status of LV system
 
+_For more information and understanding, explore yourself in the code, which is pretty well commented. The main and biggest part of the code is the I2C part ( [I2C.hpp](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/Software_Code/LV-BMS_Code/include/I2C.hpp) & [I2C.cpp](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/Software_Code/LV-BMS_Code/src/I2C.cpp) )_
+
 ## Enviroment and Library (datasheet)
 * Code written in C++
 * Code Composer Studio (CCS) with setting of `TM4C123GH6PM` microcontroller for flashing
