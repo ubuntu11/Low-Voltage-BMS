@@ -117,8 +117,6 @@ int main(void)
     BmsCanDriver.init(PF0,PF3,1000000);
     unsigned int CANTIMERVALUE=0;
     unsigned int CANTIMERSTATUS=0;
-    // TODO ... CANDriver CAN;
-    // TODO ... CAN.Init();
 
     // enable the charge pump in FET Driver
     PinControl.chargePumpEnable();
@@ -159,12 +157,6 @@ int main(void)
      * Option 2: Depending on which mode we are in by comparing the Bat+ and Pack+, turn on the corresponding CHG or DSG funktion
      */
 
-    // get the pack+ and bat+ voltage
-    AnalogMeasurement.readVoltage();
-    VoltageMeasurement voltage = AnalogMeasurement.getVoltageMeasurement();
-    uint32_t packPlus = voltage.PackVoltage - voltage.cellGND;
-    uint32_t batPlus = voltage.cellVoltage4 - voltage.cellGND;
-
 //    // Decide whether we are in Charge or Discharge mode by comparing the Bat+ and Pack+
 //    if (batPlus > packPlus)
 //    {
@@ -176,11 +168,18 @@ int main(void)
 //    }
 
 // -----------------------------------------------------------------------------------------------------------------------------
+
+    // get the pack+ and bat+ voltage
+    AnalogMeasurement.readVoltage();
+    VoltageMeasurement voltage = AnalogMeasurement.getVoltageMeasurement();
+    uint32_t packPlus = voltage.PackVoltage - voltage.cellGND;
+    uint32_t batPlus = voltage.cellVoltage4 - voltage.cellGND;
+
     while(true)
     {
-
-        BMS.update(&Registers);
-        Delay(200);  // delay 200ms (should be around 250 ms)
+        // for testing and debugging use
+        // BMS.update(&Registers);
+        // Delay(200);  // delay 200ms (should be around 250 ms)
 
 
         // get the battery temperature
@@ -239,10 +238,6 @@ int main(void)
         BmsCanDriver.sendVoltages(CanVoltageBuffer);
 
 /*
-
-
-
-
         // In case we need backup voltage
         AnalogMeasurement.readVoltage();
         VoltageMeasurement voltage = AnalogMeasurement.getVoltageMeasurement();

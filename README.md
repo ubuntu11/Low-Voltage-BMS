@@ -9,7 +9,7 @@ The repository includes:
 * Source code for the microcontroller based on C++, which is compatible for all version(1~3) design, and is written and exploited in Code Composer Studio.
 * Texas Instruments TivaWare Peripheral Driver Library for the control of microcontroller. [datasheet](https://www.ti.com/lit/ug/spmu298e/spmu298e.pdf?ts=1628540888902&ref_url=https%253A%252F%252Fwww.google.com%252F)
 
-# Table Of Contents
+## Table Of Contents
 * [Concept and Functionality of the LV-BMS](https://github.com/PingCheng-Wei/Low-Voltage-BMS#concept-and-functionality-of-the-lv-bms)
 * [Development of Hardware Part](https://github.com/PingCheng-Wei/Low-Voltage-BMS#development-of-hardware-part)
     * [Components & Datasheets](https://github.com/PingCheng-Wei/Low-Voltage-BMS#components--datasheets)
@@ -128,7 +128,9 @@ which means the measured ADC valus 3000 is corresponding to 3.15V.
 
 
 ## Altium PCB Design
-overview of each function part of the PCB design based on LV-BMS version 1:
+Generally, we have 4 functional parts: `Microcontroller (TM4C)`, `Analog Front End (BQ76920)`, `FET driver (BQ76200)`, `MOSFETs` for power contro.
+We place it in such a way that the analog part, digital part, power part are as separated as possible from each other so that we have cleaner signals. As the image below shown, which is based on LV-BMS version 1, you can see that the polygons are divided into 3:
+
 ![overview of PCB design](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/overview.JPG)
 
 Polygons and netz distribution based on LV-BMS version 1:
@@ -140,41 +142,117 @@ Polygons and netz distribution based on LV-BMS version 1:
 | Bottom Layer     | GND          | GND           | GND             |
 
 # Concept of Software Part
+We have created our header files and source files based on following different functions we needed:
+
+* `ADC`: enable the ADC function in microcontroller and include the convert voltage and temperature functions for monitoring
+* `I2C`: create a `bq769x0 class` for AFE (BQ) and enable I2C communication with microcontroller
+* `Timer`: create timer interrupt to percisely call a function at a certain rate and percise delay function, which is better then using SysCtlDelay(5000000)
+* `GPIO`: General Purpose Input/Output, to enable or activate the pins on microcontroller and set the pin as input or output (3.3V)
+* `CANDriver`: Create a basic CAN class including basic CAN bus initialization and communication functions like sending and receiving messages
+* `TestCAN`: inherit from CANDriver class. This builds the structure of our CAN message in byte level.
+
+The main idea of code is to update BMS status at the rate of $250mS$ to monitor the voltages, current and temperatures. Therefore, we have created a `GlobalBMSUpdate` function and a timer interrupt to percisely call this function at this rate. For our AFE/BQ-chip, we have created a class for it, which has lots of features such as **current status, min/max limit of each status and BQ slave adress** and functions like **I2C communication, set values, get current status values, update status and enable charging/discharging**. By doing so, you could design a LV system with even more BQ-chips by create more BQ objects and don't need to worry about the code being messy as well as confused. However, we just create 1 BQ object as we only need 1 BQ76920 in our case. This BQ class also support other chips in BQ769x0 family, which could monitor more voltages and temperatures. 
+
+Additionaly, we have enabled the ADC function in microcontroller since our microcontroller has lots of features and we want more ADCs to monitor more temperatures and utilize for backup voltages in case BQ is somehow not working.
+
+Overall steps and ideas in main function (main.cpp):
+1. Include all libraries and header files we needed
+2. Create BMS object as global variable, `BMS`
+3. Define global BMS update function, `GlobalBMSUpdate()`, for `TimerBMSUpdatesInterruptBegin()` function
+4. Set up system clock & Initialization of all TM4C Systems (GPIO, ADC, Timer, CAN)
+    * Set up system clock at 80 MHz
+    * By GPIO is mainly focusing on port enabling from TM4C (Port A-F) and also Pin type for FET Driver and LED
+    * By ADC are all the necessary settings for ADC measurement such as ADC 1,2 , sample sequence, step configuration, ADC enable
+    * Start the `TimerDelayInterruptBegin()` function so that we could have a precise delay for later use
+    * Set up the rx_pin, the tx_pin, and the rate for CAN
+5. Enable charge pump and pack+ monitor for FET Driver
+6. Initialize the I2C/BQ-chip (AFE) from `BMS`
+    * `Enable I2C Communication !!!!!`
+    * Initialize all the temperature and voltage buffer
+    * Boot up BQ-Chip by outputting 3.3V from a GPIO Pin of TM4C for just a short time (around 2ms) ⇒ BQ always need an Activation at first before it starts working (change from SHIP mode to NORMAL mode)
+    * Test I2C functionality by trying to write (I2CWriteRegister) something in the register of BQ and checking the equality from reading the register (I2CReadRegister)
+        * If communication succeed, enable I2C voltage and temperature ADC readings and switch CC_EN on
+    * Initialize and set up the alert interrupt IRS (GPIO_RISING_EDGE interrupt)
+    * Get the ADC offset and gain
+7. `BMS` system set up
+8. Call the `TimerBMSUpdatesInterruptBegin()` function to run the GlobalBMSUpadate, which would enable CHG and DSG simultaneously, in each 250 second
+9. Activate the ADC function in uC to read the temperatures
+10. check the Temperature status. if too high, then BMS shutdown the battery
+11. Send out the message through the CAN bus to let our `Main Control Unit` in car know the status of LV system
 
 ## Enviroment and Library (datasheet)
-* Code in C++
-* Code Composer Studio with setting of `TM4C123GH6PM` microcontroller for flashing
+* Code written in C++
+* Code Composer Studio (CCS) with setting of `TM4C123GH6PM` microcontroller for flashing
 * TivaWare Peripheral Driver Library
-
-
-
-
 
 # Installation 
 1. Clone this repository
-2. Download Altium and activate the licence in order to use it 
-    * imoprt all the schematic libraries, PCB libraries and compiled libraries of the conponents from `Component Footprint Import` directory
-        ```
-        Open Altium and ...
-        ```
+
+    if you download this repository directly without any changing, your directory should have the following structure:
+
+    ```
+    <dataset root directory (e.g. Low-Voltage-BMS)>/
+    assets/
+    Hardware_PCB_Design/
+        LV-BMS_high-side/
+            ...
+            LV-BMS_21_V2.PrjPcb
+            LV-BMS_V2_21E.PcbDoc
+            ...
+        LV-BMS_low-side/
+            ...
+            LV-BMS_21_V3_low-side.PrjPcb
+            LV-BMS_V3_21E_low-side.PcbDoc
+            ...
+    Software_Code/
+        LV-BMS_Code/
+            ...
+        tidriverlib-master/ 
+            ...
+    ```
+
+    Please keep the Software part structure as it is, otherwise it won't work in CCS unless you change the path to where you put the `tidriverlib-master` !!!
+
+2. Download Altium and activate a licence in order to use it 
+    * imoprt all the schematic libraries, PCB libraries and compiled libraries of the conponents from `Component Footprint Import` directory. Please check out online tutorials to see how to import Footprint from integrated libraries (`.IntLib`), schematic libraries (`.SchLib`) and PCB libraries (`.PcbLib`) or check this links: [Working with Integrated Libraries in Altium Designer 2021](https://www.altium.com/documentation/altium-designer/working-with-integrated-libraries-ad?version=17.1), [Working with Integrated Libraries in Altium Designer 2020](https://www.altium.com/documentation/altium-designer/working-with-integrated-libraries-ad)
+    
+    * Here are some useful links to download and import your own footprint of components you needed
+        * [Free Online PCB CAD Library | Ultra Librarian](https://www.ultralibrarian.com/)
+        * [Import the downloaded Ultra Librarian files into Altium Designer](https://app.ultralibrarian.com/content/help/?altium_designer.htm)
+
     * In order to open the PCB project, click the file with  `.PrjPcb` extension. This will automatically open all the schematics and PCBs file which belong to the Project.
         ```
         For instance: LV-BMS_21_V2.PrjPcb
         ```
+
 3. Download Code Composer Studio
     * Set the microcontroller to `TM4C123GH6PM`
-    * make sure the path to the TivaWare Peripheral Driver Library is correct in the properties of the project.
-        ```
-        if you download this repository directly without any changing, your directory should have the following structure:
+    * Make sure the path to the TivaWare Peripheral Driver Library (`tidriverlib-master`) is correctly pointed to in the properties of the project. Right click on the `KIT21_LVBMS_Code` and then go to `Properties`. Do the followings:
+        * Go to `CCS Build -> ARM Compiler -> Include Options`
+            ```bash
+            # Make sure this exists on the top of the first block (Add dir to #include search path) 
+            ${PROJECT_ROOT}\..\tidriverlib-master
 
-        <dataset root directory>/
-        images/
-            amodal_masks/
-                image_000000/
-                    channel_000.png
-                    channel_001.png
+            # If it's not, add this line by clicking "Add..." on the top right corner to add the library path and also move it up to the top/first one by clicking "Move Up"
+            ${PROJECT_ROOT}\..\tidriverlib-master
 
-        
-        
-        ```
+            # If you have change the path of "tidriverlib-master", please add a relative path from project root to where your "tidriverlib-master" is, such as:
+            ${PROJECT_ROOT}\relative\path\to\tidriverlib-master
+            ```
+        * Go to `CCS Build ->  ARM Linker -> File Search Path`
+            ```bash
+            # Make sure this exists on the top of the first block (Include library file or command file as input) 
+            ${PROJECT_ROOT}\..\tidriverlib-master\driverlib.lib
+
+            # If it's not, add this line by clicking "Add..." on the top right corner to add the library path and also move it up to the top/first one by clicking "Move Up"
+            ${PROJECT_ROOT}\..\tidriverlib-master\driverlib.lib
+
+            # If you have change the path of "tidriverlib-master", please add a relative path from project root to where your "tidriverlib-master" is, such as:
+            ${PROJECT_ROOT}\relative\path\to\tidriverlib-master\driverlib.lib
+            ```
+    * Right click on the `KIT21_LVBMS_Code` and then go to `Properties`. Go to `CCS Build ->  ARM Linker -> Basic Options` and find `Set C system stack size`. Make sure the `system stack size` is greater than or at least `2048` ! Otherwise it can't successfully flash the code due to insufficient memory issue
+
+4. There you are, done! Feel free to explore yourself and change the Hardware design or software code to your need
+
+
 
