@@ -141,6 +141,8 @@ Polygons and netz distribution based on LV-BMS version 1:
 | VCC Layer        | V_REF (3.0V) | +3.3V         | Bat +           |
 | Bottom Layer     | GND          | GND           | GND             |
 
+![Polygons of PCB design]((https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/PCB_02.JPG)
+
 # Concept of Software Part
 We have created our header files and source files based on following different functions we needed:
 
@@ -148,7 +150,7 @@ We have created our header files and source files based on following different f
 * `I2C`: create a `bq769x0 class` for AFE (BQ) and enable I2C communication with microcontroller
 * `Timer`: create timer interrupt to percisely call a function at a certain rate and percise delay function, which is better then using SysCtlDelay(5000000)
 * `GPIO`: General Purpose Input/Output, to enable or activate the pins on microcontroller and set the pin as input or output (3.3V)
-* `CANDriver`: Create a basic CAN class including basic CAN bus initialization and communication functions like sending and receiving messages
+* `CANDriver`: create a basic CAN class including basic CAN bus initialization and communication functions like sending and receiving messages
 * `TestCAN`: inherit from CANDriver class. This builds the structure of our CAN message in byte level.
 
 The main idea of code is to update BMS status at the rate of $250mS$ to monitor the voltages, current and temperatures. Therefore, we have created a `GlobalBMSUpdate` function and a timer interrupt to percisely call this function at this rate. For our AFE/BQ-chip, we have created a class for it, which has lots of features such as **current status, min/max limit of each status and BQ slave adress** and functions like **I2C communication, set values, get current status values, update status and enable charging/discharging**. By doing so, you could design a LV system with even more BQ-chips by create more BQ objects and don't need to worry about the code being messy as well as confused. However, we just create 1 BQ object as we only need 1 BQ76920 in our case. This BQ class also support other chips in BQ769x0 family, which could monitor more voltages and temperatures. 
