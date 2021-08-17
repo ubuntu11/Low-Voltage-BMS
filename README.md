@@ -141,7 +141,7 @@ Polygons and netz distribution based on LV-BMS version 1:
 | VCC Layer        | V_REF (3.0V) | +3.3V         | Bat +           |
 | Bottom Layer     | GND          | GND           | GND             |
 
-![Polygons of PCB design]((https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/PCB_02.JPG)
+![Polygons of PCB design](https://github.com/PingCheng-Wei/Low-Voltage-BMS/blob/main/assets/PCB_02.JPG)
 
 # Concept of Software Part
 We have created our header files and source files based on following different functions we needed:
